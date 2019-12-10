@@ -1,5 +1,6 @@
-const http = require('http');
-
+//const http = require('http');
+const fetch = require('node-fetch')
+const request = require('request')
 var express = require('express')
 var app = express();
 
@@ -12,16 +13,43 @@ var app = express();
 //   res.end('Hello World\n');
 // });
 
+
+
 app.listen(3000, ()=> console.log("hello"))
 
-app.get("/acao",(req, res, next)=>{
-  res.json(["maria","tony", "rosana"]);
-
+app.get("/",(req,res,next)=>{
+  res.json(["teste","de", "acesso"]);
 })
 
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });
+
+app.get("/acao", async (req, res, next)=>{
+  console.log('entrou')
+  request('https://jsonplaceholder.typicode.com/todos',(err, body)=>{
+    res.json(body)
+    //console.log(JSON(body))
+  })
+  
+})
 
 
-//https://www.notion.so/cotacao-em-tempo-Real-0e9627ca8b2346938c369b8eb26526fb
+app.get('/stock/:acao', async (req, res, next)=>{
+  console.log('entrou2')
+  var acao = req.params.acao
+  //res.json(acao)
+  //console.log(acao)
+  // //console.log(acao)
+  request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+    res.json(body)
+    //console.log(res.json(body))
+  })
+})
+
+
+app.get('/st/:acao', async (req, res, next)=>{
+  console.log('entrou3')
+  
+  request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+    res.json(body)
+    //console.log(JSON(body))
+  })
+})

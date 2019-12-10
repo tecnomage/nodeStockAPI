@@ -13,8 +13,10 @@
   "dependencies": {
     "dat-gui": "latest",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "path": "latest",
     "q": "latest",
+    "request": "^2.88.0",
     "sequelize": "latest",
     "tedious": "latest"
   }
