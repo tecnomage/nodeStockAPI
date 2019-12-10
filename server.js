@@ -32,6 +32,7 @@ app.get("/acao", async (req, res, next)=>{
 })
 
 
+//TODO o front deve passar uma listagem com os codigos das acoes que irei listar
 app.get('/stock/:acao', async (req, res, next)=>{
   console.log('entrou2')
   var acao = req.params.acao
@@ -53,3 +54,7 @@ app.get('/st/:acao', async (req, res, next)=>{
     //console.log(JSON(body))
   })
 })
+
+
+// req.query: directly access the parsed query string parameters
+// req.params: directly access the parsed route parameters from the path
