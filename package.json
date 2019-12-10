@@ -1,0 +1,21 @@
+{
+  "name": "ApplicationName",
+  "version": "0.0.1",
+  "description": "Application Description",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/npm.git"
+  },
+  "dependencies": {
+    "dat-gui": "latest",
+    "express": "^4.17.1",
+    "path": "latest",
+    "q": "latest",
+    "sequelize": "latest",
+    "tedious": "latest"
+  }
+}
