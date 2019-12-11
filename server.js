@@ -6,9 +6,11 @@ var cors = require('cors');
 var app = express();
 
 
-app.listen(3000, ()=> {
+app.listen(8282, ()=> {
   console.log("hello Server")
 })
+
+app.use(cors);
 
 var corsOptions = {
   origin: 'http://example.com',
