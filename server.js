@@ -2,13 +2,18 @@
 const fetch = require('node-fetch')
 const request = require('request')
 var express = require('express')
+var cors = require('cors');
 var app = express();
 
 
 app.listen(3000, ()=> {
-  
-  console.log(JSON.stringify({x:1 , n:45 , teste: 'ok'}))
-  console.log("hello")})
+  console.log("hello Server")
+})
+
+var corsOptions = {
+  origin: 'http://example.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 app.get("/",(req,res,next)=>{
   res.json(["teste","de", "acesso"]);

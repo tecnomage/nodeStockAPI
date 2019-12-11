@@ -11,6 +11,7 @@
     "url": "https://github.com/npm/npm.git"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dat-gui": "latest",
     "express": "^4.17.1",
     "node-fetch": "^2.6.0",
