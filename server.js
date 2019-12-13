@@ -42,25 +42,14 @@ app.get('/stock/:acao',cors(), async (req, res, next)=>{
   let parsed = {}
   console.log(acao)
   request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
-   var valor = body.body
+   var dados_da_acao = body.body
    //res.json(body.body)
-   parsed = JSON.parse(valor)
+   parsed = JSON.parse(dados_da_acao)
    return res.json(body.body)
    
   })
 })
 
-
-app.get('/st/:acao', async (req, res, next)=>{
-  console.log('entrou3')
-  
-  request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
-    //res.json(body)
-  //  console.log(JSON.stringify({x:1 , n:45 , teste: 'ok'}))
-    //console.log(JSON.stringify(res.json(body)))
-    
-  })
-})
 
 app.listen(port, ()=> {
   console.log('hello Server, estou ouvindo na porta 3000')
