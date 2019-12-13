@@ -1,31 +1,34 @@
 //const http = require('http');
 const fetch = require('node-fetch')
 const request = require('request')
-var express = require('express')
-var cors = require('cors');
-var app = express();
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors');
+const app = express();
+const port = 8282
 
+app.use(bodyParser.urlencoded({ extended: false }))
 
-app.listen(8282, ()=> {
-  console.log("hello Server")
-})
+app.use(bodyParser.json())
 
-app.use(cors);
+// var corsOptions = {
+  //   origin: 'http://example.com',
+  //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  // }
+  
+ //app.use(cors);
 
-var corsOptions = {
-  origin: 'http://example.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-app.get("/",(req,res,next)=>{
+ app.get("/",(req,res,next)=>{
   res.json(["teste","de", "acesso"]);
 })
 
 
-app.get("/acao", async (req, res, next)=>{
+app.get("/acao", cors() ,async (req, res, next)=>{
   console.log('entrou')
   request('https://jsonplaceholder.typicode.com/todos',(err, body)=>{
-    res.json(body)
+    //console.log(body.body)
+     return res.json(body.body)
+    //return res.send({todo:[12,3,4,5,6,7,8,9]})
     
   })
   
@@ -33,19 +36,17 @@ app.get("/acao", async (req, res, next)=>{
 
 
 //TODO o front deve passar uma listagem com os codigos das acoes que irei listar
-app.get('/stock/:acao', async (req, res, next)=>{
+app.get('/stock/:acao',cors(), async (req, res, next)=>{
   console.log('entrou2')
   var acao = req.params.acao
   let parsed = {}
+  console.log(acao)
   request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
    var valor = body.body
    //res.json(body.body)
    parsed = JSON.parse(valor)
-   res.json(parsed)
+   return res.json(body.body)
    
-   
-   //console.log(res.json(body.filter(n => n === statusCode)))
-    //console.log(res.json(body))
   })
 })
 
@@ -61,6 +62,11 @@ app.get('/st/:acao', async (req, res, next)=>{
   })
 })
 
+app.listen(port, ()=> {
+  console.log('hello Server, estou ouvindo na porta 3000')
+})
+
+ 
 
 // req.query: directly access the parsed query string parameters
 // req.params: directly access the parsed route parameters from the path
