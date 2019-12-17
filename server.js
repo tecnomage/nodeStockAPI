@@ -7,9 +7,11 @@ const cors = require('cors');
 const app = express();
 const port = 8282
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
-app.use(bodyParser.json())
+//app.use(express.bodyParser());
 
 // var corsOptions = {
   //   origin: 'http://example.com',
@@ -51,8 +53,52 @@ app.get('/stock/:acao',cors(), async (req, res, next)=>{
 })
 
 
+
+app.get('/stock/:acao',cors(), async (req, res, next)=>{
+  console.log('entrou2')
+  var acao = req.params.acao
+  let parsed = {}
+  console.log(acao)
+  request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+   var dados_da_acao = body.body
+   //res.json(body.body)
+   parsed = JSON.parse(dados_da_acao)
+   return res.json(body.body)
+   
+  })
+})
+
+
+app.post('/stocks/',cors(), (req, res)=>{
+  console.log('entrou 3')
+    //const json = await req.body;
+  
+    console.log(req.body)
+  // var json = {
+  //   "userId": 1,
+  //   "id": 1,
+  //   "title": "delectus aut autem",
+  //   "completed": false
+  // }
+  
+  // var saida = JSON.parse(json)
+  // console.log(saida)
+  //return req.body
+  
+  return res.send(req.body);
+  // request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+  //  var dados_da_acao = body.body
+  //  //res.json(body.body)
+  //  parsed = JSON.parse(dados_da_acao)
+  //  return res.json(body.body)
+   
+  // })
+})
+
+
+
 app.listen(port, ()=> {
-  console.log('hello Server, estou ouvindo na porta 3000')
+  console.log(`hello Server, estou ouvindo na porta ${port}`)
 })
 
  
