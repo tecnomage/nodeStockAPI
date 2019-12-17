@@ -71,28 +71,26 @@ app.get('/stock/:acao',cors(), async (req, res, next)=>{
 
 app.post('/stocks/',cors(), (req, res)=>{
   console.log('entrou 3')
-    //const json = await req.body;
-  
-    console.log(req.body)
-  // var json = {
-  //   "userId": 1,
-  //   "id": 1,
-  //   "title": "delectus aut autem",
-  //   "completed": false
-  // }
-  
-  // var saida = JSON.parse(json)
-  // console.log(saida)
-  //return req.body
-  
-  return res.send(req.body);
-  // request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
-  //  var dados_da_acao = body.body
-  //  //res.json(body.body)
-  //  parsed = JSON.parse(dados_da_acao)
-  //  return res.json(body.body)
-   
-  // })
+    // console.log(req.body)
+    var acoes = req.body.acoes.map( acao => {
+      request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+       var dados_da_acao = body.body
+       //res.json(body.body)
+       parsed = JSON.parse(dados_da_acao)
+       console.log(dados_da_acao)
+       return parsed
+       })
+
+    })
+    console.log(acoes)
+    // request(`http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,(err, body)=>{
+      //  var dados_da_acao = body.body
+      //  //res.json(body.body)
+      //  parsed = JSON.parse(dados_da_acao)
+      //  return res.json(body.body)
+      
+      return res.send(acoes);
+  //
 })
 
 
