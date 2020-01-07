@@ -71,28 +71,32 @@ app.post("/stocks/", cors(), async (req, res) => {
   // console.log(req.body)
   var acoes = req.body.acoes;
   var novos = {};
-  //console.log(acoes);
+  
   var saida = [];
-  // novos =n
-   await acoes.map(acao => {
+  
+   //saida = 
+   saida = await acoes.map(acao => {
+     var lista = []
+     var parsed;
     request(
       `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
       (err, body) => {
         var dados_da_acao = body.body;
-        var parsed = JSON.parse(dados_da_acao);
-        saida.push({acao: parsed});
+        parsed = JSON.parse(dados_da_acao);
+        //saida.push({acao: parsed});
+        //saida.push(parsed);
          novos = {...parsed};
-        //console.log(saida)
+         console.log(dados_da_acao)
+       return parsed;
+        
       }
     );
-    //console.log(saida)
-    console.log(novos)
-    return { acao: saida };
+    //  return parsed
+    //return "teste";
+    //return { acao: saida };
   });
-  console.log(saida);
-  console.log(novos);
-
-  return res.send(saida);
+  console.log('')
+   return res.send(saida);
 });
 
 app.listen(port, () => {
