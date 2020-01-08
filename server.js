@@ -66,37 +66,72 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
   );
 });
 
+// app.post("/stocks/", cors(), async (req, res) => {
+//   var acoes = req.body.acoes;
+//   var novos = {};
+//   let teste;
+//   var saida = [];
+//   var result = [];
+
+//   saida = await acoes.map(acao => {
+//     var lista = [];
+//     var parsed;
+
+//     request(
+//       `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
+//       (err, body) => {
+//         //TODO1 como parsear aqui
+//         var dados_da_acao = JSON.parse(body.body);
+//         //parsed = JSON.parse(dados_da_acao);
+//         //saida.push({acao: parsed});
+//         //saida.push(parsed);
+//         novos = { ...parsed };
+//         result.push(dados_da_acao["stock_id"]);
+//         console.log(dados_da_acao);
+//         teste = "teste";
+//         //"stock_id" : "SP.GOAU3"
+
+//         return teste;
+//       }
+//     );
+//     //  return parsed
+//     return teste;
+//     //return "teste";
+//     //return { acao: saida };
+//   });
+//   console.log("");
+//   return res.send(saida);
+// });
+
 app.post("/stocks/", cors(), async (req, res) => {
-  console.log("entrou 3");
-  // console.log(req.body)
-  var acoes = req.body.acoes;
-  var novos = {};
-  
-  var saida = [];
-  
-   //saida = 
-   saida = await acoes.map(acao => {
-     var lista = []
-     var parsed;
-    request(
-      `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-      (err, body) => {
-        var dados_da_acao = body.body;
-        parsed = JSON.parse(dados_da_acao);
-        //saida.push({acao: parsed});
-        //saida.push(parsed);
-         novos = {...parsed};
-         console.log(dados_da_acao)
-       return parsed;
-        
-      }
-    );
-    //  return parsed
-    //return "teste";
-    //return { acao: saida };
-  });
-  console.log('')
-   return res.send(saida);
+  let acoes = req.body.acoes;
+  let saida = [];
+
+ 
+   let resultado;
+ Promise.all(
+    await acoes.map(acao => {
+      //var resultado
+
+      request(
+        `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
+        (err, body) => {
+          resultado = JSON.parse(body.body);
+
+          //saida.push(resultado);
+          return resultado;
+        }
+      );
+
+      return resultado;
+    })
+  ).then(values =>{
+    console.log(values)
+  })
+
+  console.log();
+  //return res.send(saida);
+  res.send(saida);
 });
 
 app.listen(port, () => {
