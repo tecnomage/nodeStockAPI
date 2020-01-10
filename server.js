@@ -103,35 +103,68 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
 //   return res.send(saida);
 // });
 
-app.post("/stocks/", cors(), async (req, res) => {
-  let acoes = req.body.acoes;
-  let saida = [];
-
- 
-   let resultado;
- Promise.all(
-    await acoes.map(acao => {
-      //var resultado
-
-      request(
-        `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-        (err, body) => {
-          resultado = JSON.parse(body.body);
-
-          //saida.push(resultado);
-          return resultado;
-        }
-      );
-
-      return resultado;
+app.get("/fetch", cors(), (req, res) => {
+  const url = "https://jsonplaceholder.typicode.com/todos/1";
+  var headers = {
+    "Content-Type": "application/json"
+  };
+  
+  try {
+    const resposta = fetch(url, { method: "GET", headers: headers })
+    .then(res => {
+      console.log('entrou')
+      console.log(res);
+      return res.json();
     })
-  ).then(values =>{
-    console.log(values)
-  })
+    
+  } catch (error) {
+    console.log(error)
+  }
+});
 
-  console.log();
-  //return res.send(saida);
-  res.send(saida);
+app.post("/stocks/", cors(), async (req, res) => {
+  const { acoes } = req.body;
+  
+
+  const opcoes = {
+    url: "https://jsonplaceholder.typicode.com/todos/1",
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Accept-Charset": "utf-8"
+    }
+  };
+  try {
+    // const arrayPromises = acoes.map(acao => request(opcoes, (err,res,body) =>{
+    //   console.log(body)
+    //   return body;
+    // }));
+    const url = "https://jsonplaceholder.typicode.com/todos/1";
+    const headers = {
+      "Content-Type": "application/json",
+      client_id: "1001125",
+      client_secret: "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
+    };
+
+    // const resposta = await fetch(url, { method: "GET", headers: headers })
+    //   .then(res => {
+    //      console.res.json();
+    //   })
+    //   .then(json => {
+    //     console.log(json);
+    //     //return res.send(json)
+    //   });
+    
+
+    // const arrayPromises = acoes.map(acao => fetch('https://jsonplaceholder.typicode.com/todos/1')
+    // .then(body => console.log(body))
+    // .then(res => res.text()))
+    // const resolvedPromises = await Promise.all(arrayPromises);
+    // const saida = resolvedPromises.map(async p => await p.json());
+    return res.send("saida");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(port, () => {
