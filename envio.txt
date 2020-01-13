@@ -1,3 +1,14 @@
 curl -d   "{\"nome\":\"vinicius\" ,\"idade\":33}" -H "Content-Type: application/json" http://localhost:8282/stocks
 
 curl -d   "{\"acoes\": [ \"petr4\", \"goau4\"] }" -H "Content-Type: application/json" http://localhost:8282/stocks
+
+
+
+app.post("/stocks/", cors(), async (req, res) => {
+    const { acoes } = req.body;
+    const arrayPromises = acoes.map(acao => fetch(`acesso à API/${acao}`));
+    const resolvedPromises = await Promise.all(arrayPromises);
+    const saida = resolvedPromises.map(async p => await p.json());
+    
+    return res.send(saida);
+  });

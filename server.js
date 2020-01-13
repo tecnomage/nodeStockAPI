@@ -1,5 +1,6 @@
 //const http = require('http');
 const fetch = require("node-fetch");
+const axios = require("axios");
 const request = require("request");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -109,22 +110,30 @@ app.get("/fetch", cors(), (req, res) => {
     "Content-Type": "application/json"
   };
   
-  try {
-    const resposta = fetch(url, { method: "GET", headers: headers })
-    .then(res => {
-      console.log('entrou')
+  console.log("entrou");
+
+  const resposta = async ()=> {
+    fetch(url, { method: "GET", headers: headers }).then(
+    res => {
+      console.log("entrou");
       console.log(res);
       return res.json();
-    })
-    
+    })};
+
+  try {
+  const saida = async () => {
+    console.log("entrou saida");
+    const saida = await resposta();
+    return saida;
+  }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 
+
 app.post("/stocks/", cors(), async (req, res) => {
   const { acoes } = req.body;
-  
 
   const opcoes = {
     url: "https://jsonplaceholder.typicode.com/todos/1",
@@ -154,7 +163,6 @@ app.post("/stocks/", cors(), async (req, res) => {
     //     console.log(json);
     //     //return res.send(json)
     //   });
-    
 
     // const arrayPromises = acoes.map(acao => fetch('https://jsonplaceholder.typicode.com/todos/1')
     // .then(body => console.log(body))
