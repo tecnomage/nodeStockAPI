@@ -3,8 +3,8 @@ const fetch = require("node-fetch");
 const axios = require("axios");
 const request = require("request");
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const app = express();
 const port = 8282;
 
@@ -19,13 +19,13 @@ app.use(bodyParser.raw());
 //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-//app.use(cors);
+app.use(cors());
 
 app.get("/", (req, res, next) => {
   res.json(["teste", "de", "acesso"]);
 });
 
-app.get("/acao", cors(), async (req, res, next) => {
+app.get("/acao", async (req, res, next) => {
   console.log("entrou");
   request("https://jsonplaceholder.typicode.com/todos", (err, body) => {
     //console.log(body.body)
@@ -67,70 +67,75 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
   );
 });
 
-// app.post("/stocks/", cors(), async (req, res) => {
-//   var acoes = req.body.acoes;
-//   var novos = {};
-//   let teste;
-//   var saida = [];
-//   var result = [];
-
-//   saida = await acoes.map(acao => {
-//     var lista = [];
-//     var parsed;
-
-//     request(
-//       `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-//       (err, body) => {
-//         //TODO1 como parsear aqui
-//         var dados_da_acao = JSON.parse(body.body);
-//         //parsed = JSON.parse(dados_da_acao);
-//         //saida.push({acao: parsed});
-//         //saida.push(parsed);
-//         novos = { ...parsed };
-//         result.push(dados_da_acao["stock_id"]);
-//         console.log(dados_da_acao);
-//         teste = "teste";
-//         //"stock_id" : "SP.GOAU3"
-
-//         return teste;
-//       }
-//     );
-//     //  return parsed
-//     return teste;
-//     //return "teste";
-//     //return { acao: saida };
-//   });
-//   console.log("");
-//   return res.send(saida);
-// });
-
-app.get("/fetch", cors(), (req, res) => {
-  const url = "https://jsonplaceholder.typicode.com/todos/1";
-  var headers = {
-    "Content-Type": "application/json"
-  };
+app.post("/stocks/", cors(), async (req, res) => {
+  var acoes = req.body.acoes;
+  var novos = {};
   
-  console.log("entrou");
+  var saida = [];
+  var lista = [];
 
-  const resposta = async ()=> {
-    fetch(url, { method: "GET", headers: headers }).then(
-    res => {
-      console.log("entrou");
-      console.log(res);
-      return res.json();
-    })};
+busca_acoes(acoes, (valor)=>{
+  var retorno_Acoes = acoes.map(acao=>)
+  console.log(valor);
+});{
 
-  try {
-  const saida = async () => {
-    console.log("entrou saida");
-    const saida = await resposta();
-    return saida;
-  }
-  } catch (error) {
-    console.log(error);
-  }
+}
+
+
+
+
+
+  function busca_acoes(acao, callback){
+    acoes.map(async acao => {
+      var parsed;
+      const saida = await request(
+        `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
+       async (err, body) => {
+          var dados_da_acao = JSON.parse(body.body);
+          novos = { ...parsed };
+          lista.push(dados_da_acao);
+          console.log(dados_da_acao);
+        }
+      );
+      
+      return lista;
+  
+    });
+
+}
+
+  
 });
 
+app.get("/fetch", async (req, res, next) => {
+  console.log("entrou");
+
+  const saida = await request(
+    "https://jsonplaceholder.typicode.com/todos/",
+    async (err, body) => {
+      let teste = []
+      const tratados = await body.body;
+      const parseado = JSON.parse(tratados);
+
+      for(var i=0; i < parseado.length; i++) {
+        var d = parseado[i];
+        if(parseado[i].id>=1 && parseado[i].id<=5)
+            teste.push(parseado[i])
+      }
+
+      console.log('12');
+      return res.send(teste);
+      // tratados.forEach(function (element) {
+      //   console.log(element.title)
+      //    });
+    }
+  );
+
+  
+  //return res.send("ok");
+});
+
+//return res.send(saida);
 
 app.post("/stocks/", cors(), async (req, res) => {
   const { acoes } = req.body;
