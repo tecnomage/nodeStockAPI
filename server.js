@@ -70,40 +70,36 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
 app.post("/stocks/", cors(), async (req, res) => {
   var acoes = req.body.acoes;
   var novos = {};
-  
+
   var saida = [];
   var lista = [];
 
-busca_acoes(acoes, (valor)=>{
-  var retorno_Acoes = acoes.map(acao=>)
-  console.log(valor);
-});{
+  busca_acoes(acoes, valor => {
+    lista= [...lista,valor]
+    console.log(valor);
+    if(lista.length>=2){
+      res.send(lista)
+    }
+  });
+  {
+    console.log("isso acontece 1o");
+  }
 
-}
-
-
-
-
-
-  function busca_acoes(acao, callback){
-    acoes.map(async acao => {
-      var parsed;
-      const saida = await request(
+  function busca_acoes(acoes, callback) {
+    var parsed;
+    const saida = acoes.map(acao => {
+      request(
         `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-       async (err, body) => {
+        (err, body) => {
           var dados_da_acao = JSON.parse(body.body);
           novos = { ...parsed };
-          lista.push(dados_da_acao);
-          console.log(dados_da_acao);
+          return callback(dados_da_acao);
         }
       );
-      
-      return lista;
-  
+
+      //return lista;
     });
-
-}
-
+  }
   
 });
 
@@ -113,17 +109,16 @@ app.get("/fetch", async (req, res, next) => {
   const saida = await request(
     "https://jsonplaceholder.typicode.com/todos/",
     async (err, body) => {
-      let teste = []
+      let teste = [];
       const tratados = await body.body;
       const parseado = JSON.parse(tratados);
 
-      for(var i=0; i < parseado.length; i++) {
+      for (var i = 0; i < parseado.length; i++) {
         var d = parseado[i];
-        if(parseado[i].id>=1 && parseado[i].id<=5)
-            teste.push(parseado[i])
+        if (parseado[i].id >= 1 && parseado[i].id <= 5) teste.push(parseado[i]);
       }
 
-      console.log('12');
+      console.log("12");
       return res.send(teste);
       // tratados.forEach(function (element) {
       //   console.log(element.title)
@@ -131,7 +126,6 @@ app.get("/fetch", async (req, res, next) => {
     }
   );
 
-  
   //return res.send("ok");
 });
 
