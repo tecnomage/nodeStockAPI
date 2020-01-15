@@ -75,17 +75,17 @@ app.post("/stocks/", cors(), async (req, res) => {
   var lista = [];
 
   busca_acoes(acoes, valor => {
-    lista= [...lista,valor]
+    lista = [...lista, valor];
     console.log(valor);
-    if(lista.length>=2){
-      res.send(lista)
+    if (lista.length === acoes.length) {
+      res.send(lista);
     }
   });
   {
     console.log("isso acontece 1o");
   }
 
-  function busca_acoes(acoes, callback) {
+  async function busca_acoes(acoes, callback) {
     var parsed;
     const saida = acoes.map(acao => {
       request(
@@ -100,33 +100,13 @@ app.post("/stocks/", cors(), async (req, res) => {
       //return lista;
     });
   }
-  
 });
 
 app.get("/fetch", async (req, res, next) => {
   console.log("entrou");
-
-  const saida = await request(
-    "https://jsonplaceholder.typicode.com/todos/",
-    async (err, body) => {
-      let teste = [];
-      const tratados = await body.body;
-      const parseado = JSON.parse(tratados);
-
-      for (var i = 0; i < parseado.length; i++) {
-        var d = parseado[i];
-        if (parseado[i].id >= 1 && parseado[i].id <= 5) teste.push(parseado[i]);
-      }
-
-      console.log("12");
-      return res.send(teste);
-      // tratados.forEach(function (element) {
-      //   console.log(element.title)
-      //    });
-    }
-  );
-
-  //return res.send("ok");
+  fetch("https://jsonplaceholder.typicode.com/todos/").then(res => {
+    return res.send("ok");
+  });
 });
 
 //return res.send(saida);
