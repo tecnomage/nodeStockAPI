@@ -1,3 +1,41 @@
 curl -d   "{\"nome\":\"vinicius\" ,\"idade\":33}" -H "Content-Type: application/json" http://localhost:8282/stocks
 
 curl -d   "{\"acoes\": [ \"petr4\", \"goau4\"] }" -H "Content-Type: application/json" http://localhost:8282/stocks
+
+
+
+app.post("/stocks/", cors(), async (req, res) => {
+    const { acoes } = req.body;
+    const arrayPromises = acoes.map(acao => fetch(`acesso à API/${acao}`));
+    const resolvedPromises = await Promise.all(arrayPromises);
+    const saida = resolvedPromises.map(async p => await p.json());
+    
+    return res.send(saida);
+  });
+
+
+  parseia o json e em cada parsamento faz um request
+
+router.get('/', function(req, res) {
+    var data = "none";
+    var newData = "";
+    parse(data , function( val ) {
+         newData = val;
+         console.log( "newData : " , newData );
+         console.log( "this happens last" );
+         // if you need to return anything, return it here. Do everything else you want to do inside this parse function.
+         return res.sendStatus( 200 );
+    } );
+    console.log( "this happens first" );
+});
+
+function parse( out , callback ){
+    url = 'http://www.XXXXXX.int/';
+    out =  out || "Init value";
+    request(url, out,  function(error, response, html){
+        // don't you do anything with the error, response, html variables?
+        console.log( "out : " , out);
+        out ="ASDA";
+        return callback( out ); //op1
+   }) ;
+}
