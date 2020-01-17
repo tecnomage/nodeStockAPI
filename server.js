@@ -68,30 +68,35 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
 
 app.post("/stocks/", cors(), async (req, res) => {
   console.log("entrou 3");
-  // console.log(req.body)
-  var acoes = req.body.acoes;
+  
+  //FIXME nao esta recebendo o acoes do body
+  var acoes = req.body.acoes
+    //req.body.acoes;
+  let teste = req.body.acoes;
   var novos = {};
-  //console.log(acoes);
   var saida = [];
-  // novos =n
-   await acoes.map(acao => {
-    request(
-      `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-      (err, body) => {
-        var dados_da_acao = body.body;
-        var parsed = JSON.parse(dados_da_acao);
-        saida.push({acao: parsed});
-         novos = {...parsed};
-        //console.log(saida)
-      }
-    );
-    //console.log(saida)
-    console.log(novos)
-    return { acao: saida };
-  });
-  console.log(saida);
-  console.log(novos);
-
+  
+  try {
+    await acoes.map(acao => {
+     request(
+       `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
+       (err, body) => {
+         var dados_da_acao = body.body;
+         var parsed = JSON.parse(dados_da_acao);
+         saida.push({acao: parsed});
+          novos = {...parsed};
+        
+       }
+     );
+     //console.log(saida)
+     console.log(novos)
+     return { acao: saida };
+   });
+    
+  } catch (error) {
+    console.log(error)
+  }
+  
   return res.send(saida);
 });
 
