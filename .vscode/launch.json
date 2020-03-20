@@ -10,11 +10,11 @@
             "request": "attach",
             "protocol": "inspector",
             "restart": true,
-            "name": "Compose Func",
+            "name": "Node",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/composeFunc.js"
+            "program": "${workspaceFolder}/server.js"
         }
     ]
 }
