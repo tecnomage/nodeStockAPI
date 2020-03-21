@@ -99,14 +99,19 @@ app.post("/stocks/", cors(), async (req, res) => {
 
       //return lista;
     });
-  }
+  }git
 });
 
 app.get("/fetch", async (req, res, next) => {
   console.log("entrou");
-  fetch("https://jsonplaceholder.typicode.com/todos/").then(res => {
-    return res.send("ok");
-  });
+  try {
+    fetch("https://jsonplaceholder.typicode.com/todos/").then(res => {
+      return res.send("ok");
+    });
+    
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 //return res.send(saida);
@@ -123,7 +128,7 @@ app.post("/stocks/", cors(), async (req, res) => {
     }
   };
   try {
-    // const arrayPromises = acoes.map(acao => request(opcoes, (err,res,body) =>{
+    // const arrayPromises = acoes.map(acao => request(opcoes, (err,res,bodynpo) =>{
     //   console.log(body)
     //   return body;
     // }));
