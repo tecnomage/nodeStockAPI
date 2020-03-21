@@ -14,10 +14,24 @@ app.use(bodyParser.raw());
 
 //app.use(express.bodyParser());
 
-// var corsOptions = {
-//   origin: 'http://example.com',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
+const whiteList = [
+  "http://localhost:3000/",
+  "http://127.0.0.1",
+  "http://localhost/",
+  "http://localhost:3000/teste/"
+];
+
+var corsOptions = {
+  origin: function(origin, callback) {
+    if (whiteList.indexOf(origin) == -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 app.use(cors());
 
@@ -54,6 +68,7 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
 app.get("/stock/:acao", cors(), async (req, res, next) => {
   console.log("entrou2");
   var acao = req.params.acao;
+  console.log(acao);
   let parsed = {};
   console.log(acao);
   request(
@@ -67,16 +82,25 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
   );
 });
 
-app.post("/stocks/", cors(), async (req, res) => {
+app.post("/stocks/", cors(corsOptions), async (req, res) => {
+  
   var acoes = req.body.acoes;
   var novos = {};
-
+  console.log(acoes);
   var saida = [];
   var lista = [];
 
+  //TODO1 verificar se acoes tem dados
+  // if (
+  //   rendafixa &&
+  //   Object.entries(rendafixa) &&
+  //   operacao &&
+  //   Object.entries(operacao)
+  // )
+
   busca_acoes(acoes, valor => {
     lista = [...lista, valor];
-    console.log(valor);
+    //console.log(valor);
     if (lista.length === acoes.length) {
       res.send(lista);
     }
@@ -87,19 +111,23 @@ app.post("/stocks/", cors(), async (req, res) => {
 
   async function busca_acoes(acoes, callback) {
     var parsed;
-    const saida = acoes.map(acao => {
-      request(
-        `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
-        (err, body) => {
-          var dados_da_acao = JSON.parse(body.body);
-          novos = { ...parsed };
-          return callback(dados_da_acao);
-        }
-      );
+    //TODO O ERRO ESTÁ AQUI map of undefined
+    if (Object.entries(acoes) && acoes) {
+      console.log(acoes);
+      const saida = acoes.map(acao => {
+        request(
+          `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
+          (err, body) => {
+            var dados_da_acao = JSON.parse(body.body);
+            novos = { ...parsed };
+            return callback(dados_da_acao);
+          }
+        );
 
-      //return lista;
-    });
-  }git
+        return lista;
+      });
+    }
+  }
 });
 
 app.get("/fetch", async (req, res, next) => {
