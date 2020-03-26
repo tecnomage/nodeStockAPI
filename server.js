@@ -82,7 +82,7 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
   );
 });
 
-app.post("/stocks/", cors(corsOptions), async (req, res) => {
+app.post("/stocks/", cors(), async (req, res) => {
   
   var acoes = req.body.acoes;
   var novos = {};
@@ -113,14 +113,16 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
     var parsed;
     //TODO O ERRO ESTÁ AQUI map of undefined
     if (Object.entries(acoes) && acoes) {
-      console.log(acoes);
-      const saida = acoes.map(acao => {
-        request(
+      //console.log(acoes);
+      const saida = await acoes.map(acao => {
+         request(
           `http://webservices.infoinvest.com.br/cotacoes/cotacoes_handler.asp?&quotes=&quotes=sp.${acao}`,
           (err, body) => {
-            var dados_da_acao = JSON.parse(body.body);
+            //var dados_da_acao = JSON.parse(body.body);
+            var dados_da_acao = body.body;
             novos = { ...parsed };
-            return callback(dados_da_acao);
+            //return callback(dados_da_acao);
+            return dados_da_acao;
           }
         );
 

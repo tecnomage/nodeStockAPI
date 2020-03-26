@@ -1,0 +1,21 @@
+SyntaxError: Unexpected token o in JSON at position 1
+    at JSON.parse (<anonymous>)
+    at parse (/home/david/dev/nodeAPi/node_modules/body-parser/lib/types/json.js:89:19)
+    at /home/david/dev/nodeAPi/node_modules/body-parser/lib/read.js:121:18
+    at invokeCallback (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:224:16)
+    at done (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:213:7)
+    at IncomingMessage.onEnd (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:273:7)
+    at IncomingMessage.emit (events.js:194:15)
+    at endReadableNT (_stream_readable.js:1103:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+SyntaxError: Unexpected token o in JSON at position 1
+    at JSON.parse (<anonymous>)
+    at parse (/home/david/dev/nodeAPi/node_modules/body-parser/lib/types/json.js:89:19)
+    at /home/david/dev/nodeAPi/node_modules/body-parser/lib/read.js:121:18
+    at invokeCallback (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:224:16)
+    at done (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:213:7)
+    at IncomingMessage.onEnd (/home/david/dev/nodeAPi/node_modules/raw-body/index.js:273:7)
+    at IncomingMessage.emit (events.js:194:15)
+    at endReadableNT (_stream_readable.js:1103:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+
