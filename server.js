@@ -49,37 +49,43 @@ app.get("/acao", async (req, res, next) => {
 });
 
 app.post("/stocks/", cors(corsOptions), async (req, res) => {
-  //var acoes = req.body.acoes;
-  var acoes = "goau4";
+  var acoes = req.body.acoes;
+  //var acoes = "goau4";
   var novos = {};
 
-  //console.log(acoes);
-  var saida = [];
-  var lista = [];
+   var resposta = resposta_do_servidor(acoes, busca_acao);
+  //var resposta = busca_acao("petr4");
 
-  //var resposta = resposta_do_servidor(acoes, busca_acao);
-  var resposta = busca_acao("petr4");
-  res.send(resposta);
-  
+  //res.send(resposta);
+
   //TODO Rename this function
   async function resposta_do_servidor(acoes, cb) {
     let cotacoes = [];
     //FIXME1 FICA RESOLVE REJECT MESMO?
     //https://stackoverflow.com/questions/42964102/syntax-for-async-arrow-function
-    cotacoes = acoes.map( async () => {
-      let resultado;
-      let promise = new Promise(async (resolve, reject) => {
-        var listagem_dados_acao = await cb(acoes);
-        //colocar um if para chegar se tem dados
-        resolve(listagem_dados_acao);
-        //return retorno;
-      });
-      resultado =  await promise;
-      //funcao eh async devo colocar um resolve aqui?
-      return resultado;
+    // cotacoes = acoes.map( async acao => {
+    //     //let resultado = new Promise();
+    //     var listagem_dados_acao = await cb(acao);
+    //     //console.log(listagem_dados_acao)
+    //     return Promise.resolve(listagem_dados_acao);
+    //     //let dados_da_acao = listagem_dados_acao;
+    //     //return retorno;
       
-    });
-    return cotacoes;
+    // });
+
+    const getData = async () => {
+          return Promise.all(acoes.map(acao => cb(acao)))
+    }
+    
+    getData().then(data => {
+      console.log(data)
+       res.send(data)
+    })
+    
+    let saida = await Promise.resolve(cotacoes);
+    //console.log(saida)
+    //res.send(saida)
+    //res.send(saida);
   }
 
   async function busca_acao(acao) {
