@@ -57,15 +57,29 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
   var saida = [];
   var lista = [];
 
-  var resposta = resposta_do_servidor(acoes, busca_acao);
-  //res.send(resposta);
+  //var resposta = resposta_do_servidor(acoes, busca_acao);
+  var resposta = busca_acao("petr4");
+  res.send(resposta);
+  
   //TODO Rename this function
- async function resposta_do_servidor(acoes, cb) {
-    var listagem_dados_acao = await cb(acoes);
-    console.log(listagem_dados_acao);
-    res.send(listagem_dados_acao);
-    return listagem_dados_acao;
-    
+  async function resposta_do_servidor(acoes, cb) {
+    let cotacoes = [];
+    //FIXME1 FICA RESOLVE REJECT MESMO?
+    //https://stackoverflow.com/questions/42964102/syntax-for-async-arrow-function
+    cotacoes = acoes.map( async () => {
+      let resultado;
+      let promise = new Promise(async (resolve, reject) => {
+        var listagem_dados_acao = await cb(acoes);
+        //colocar um if para chegar se tem dados
+        resolve(listagem_dados_acao);
+        //return retorno;
+      });
+      resultado =  await promise;
+      //funcao eh async devo colocar um resolve aqui?
+      return resultado;
+      
+    });
+    return cotacoes;
   }
 
   async function busca_acao(acao) {
@@ -79,13 +93,12 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
           parsed = JSON.parse(dados_da_acao);
 
           resolve(parsed);
-          //return res.json(body.body);
         }
       );
     });
-     let resultado =  await promise;
-     console.log(resultado)
-     return resultado
+    let resultado = await promise;
+    //console.log(resultado)
+    return resultado;
   }
 
   async function busca_acoes(acoes) {
@@ -106,7 +119,6 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
       });
     }
   }
-  
 });
 
 //TODO o front deve passar uma listagem com os codigos das acoes que irei listar
