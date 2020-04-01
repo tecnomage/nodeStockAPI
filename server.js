@@ -57,12 +57,14 @@ app.get("/acao", async (req, res, next) => {
 });
 
 app.post("/stocks/", async (req, res) => {
-  var acoes = req.body.acoes;
-  // console.log(acoes)
-  //var acoes = "goau4";
-  var novos = {};
-  var resposta = resposta_do_servidor(acoes, busca_acao);
-  //TODO Rename this function
+  //FIXME1 body da req esta vindo vazio
+  const acoes = req.body.acoes;
+  console.log(typeof(acoes))
+  //console.log(req)
+  
+  const resposta = resposta_do_servidor(acoes, busca_acao);
+  
+    //TODO Rename this function
   async function resposta_do_servidor(acoes, cb) {
     const getData = async () => {
       return Promise.all(acoes.map(acao => cb(acao)));
