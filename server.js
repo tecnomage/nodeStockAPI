@@ -49,10 +49,10 @@ app.get("/acao", async (req, res, next) => {
 });
 
 app.post("/stocks/", cors(corsOptions), async (req, res) => {
-  var acoes = req.body.acoes;
+  const acoes = req.body.acoes;
   //var acoes = "goau4";
-  var novos = {};
-   var resposta = resposta_do_servidor(acoes, busca_acao);
+  
+  const resposta = resposta_do_servidor(acoes, busca_acao);
   //TODO Rename this function
   async function resposta_do_servidor(acoes, cb) {
       
@@ -67,7 +67,8 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
    
    
   }
-
+   
+  //TODO refactor to use const
   async function busca_acao(acao) {
     let promise = new Promise((resolve, reject) => {
       request(
@@ -87,6 +88,7 @@ app.post("/stocks/", cors(corsOptions), async (req, res) => {
     return resultado;
   }
 
+  //TODO refactor to use const
   async function busca_acoes(acoes) {
     var parsed;
     var dados_acoes = [];
