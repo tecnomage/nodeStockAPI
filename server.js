@@ -1,12 +1,20 @@
 //const http = require('http');
-const fetch = require("node-fetch");
-const axios = require("axios");
 const request = require("request");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 8282;
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  next();
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -23,7 +31,7 @@ const whiteList = [
 
 var corsOptions = {
   origin: function(origin, callback) {
-    if (whiteList.indexOf(origin) == -1) {
+    if (whiteList.indexOf(origin) == -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -33,7 +41,7 @@ var corsOptions = {
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get("/", (req, res, next) => {
   res.json(["teste", "de", "acesso"]);
@@ -48,24 +56,22 @@ app.get("/acao", async (req, res, next) => {
   });
 });
 
-app.post("/stocks/", cors(corsOptions), async (req, res) => {
-  const acoes = req.body.acoes;
+app.post("/stocks/", async (req, res) => {
+  var acoes = req.body.acoes;
+  // console.log(acoes)
   //var acoes = "goau4";
-  
-  const resposta = resposta_do_servidor(acoes, busca_acao);
+  var novos = {};
+  var resposta = resposta_do_servidor(acoes, busca_acao);
   //TODO Rename this function
   async function resposta_do_servidor(acoes, cb) {
-      
     const getData = async () => {
-          return Promise.all(acoes.map(acao => cb(acao)))
-    }
-    
+      return Promise.all(acoes.map(acao => cb(acao)));
+    };
+
     getData().then(data => {
-      console.log(data)
-       res.send(data)
-    })
-   
-   
+      console.log(data);
+      res.send(data);
+    });
   }
    
   //TODO refactor to use const
@@ -143,15 +149,8 @@ app.get("/stock/:acao", cors(), async (req, res, next) => {
   );
 });
 
-app.get("/fetch", async (req, res, next) => {
-  console.log("entrou");
-  try {
-    fetch("https://jsonplaceholder.typicode.com/todos/").then(res => {
-      return res.send("ok");
-    });
-  } catch (error) {
-    console.log(error);
-  }
+app.get("/cors", (req, res, next) => {
+  res.json({ msg: "cors esta funcionando" });
 });
 
 app.listen(port, () => {
